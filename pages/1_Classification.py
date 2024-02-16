@@ -59,7 +59,7 @@ if selected == "SVM":
     if predict_btt:
         data = loaded_vectorizer.transform([sentence]).toarray()
         prediction1 = loaded_model1.predict(data)
-
+        st.text(f"Prediction is {prediction1}")
         if prediction1 == ['politic']:
             st.text("This is Politics News")
         elif prediction1 == ['crime']:
