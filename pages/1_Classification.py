@@ -10,7 +10,7 @@ from sklearn.feature_extraction.text import TfidfVectorizer
 #Load Stop Word File
 stopwordslist = []
 slist = []
-with open("stopwords.txt", encoding = 'utf8') as stopwordsfile:
+with open("stopword.txt", encoding = 'utf8') as stopwordsfile:
     stopwords = stopwordsfile.readlines()
     slist.extend(stopwords)
     for w in range(len(slist)):
@@ -38,8 +38,8 @@ loaded_model1 = pickle.load(open(filename1, 'rb'))
 loaded_model2 = pickle.load(open(filename1, 'rb'))
 
 #Load Vectorizers from disk
-loaded_vectorizer = pickle.load(open("vectorizer_cap.pickle", "rb"))
-loaded_selector = pickle.load(open("selector_cap.pickle", "rb"))
+loaded_vectorizer = pickle.load(open("vectorizer.pickle", "rb"))
+#loaded_selector = pickle.load(open("selector_cap.pickle", "rb"))
 
 with st.sidebar:
     selected = option_menu(
@@ -57,7 +57,7 @@ if selected == "SVM":
     sentence = tokenize(sentence)
     predict_btt = st.button("Predict")
     if predict_btt:
-        data = loaded_selector.transform(loaded_vectorizer.transform([sentence]).toarray())
+        data = loaded_vectorizer.transform([sentence]).toarray()
         prediction1 = loaded_model1.predict(data)
 
         if prediction1 == ['politic']:
@@ -76,7 +76,7 @@ if selected == "Naive Bayes":
     sentence1 = tokenize(sentence1)
     predict_btt = st.button("Predict")
     if predict_btt:
-        data = loaded_selector.transform(loaded_vectorizer.transform([sentence1]).toarray())
+        data = loaded_vectorizer.transform([sentence1]).toarray()
         prediction2 = loaded_model2.predict(data)
 
         if prediction2 == ['politic']:
