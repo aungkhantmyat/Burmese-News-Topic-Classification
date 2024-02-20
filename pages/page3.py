@@ -222,23 +222,23 @@ for category, (accuracy, count) in category_accuracies.items():
 
 st.divider()
 
-    def get_vectorizer_content():
-        # Load your vectorizer file
-        with open(vectorizer_filename, 'rb') as file:
-            vectorizer_content = file.read()
-        return vectorizer_content
+def get_vectorizer_content():
+    # Load your vectorizer file
+    with open(vectorizer_filename, 'rb') as file:
+        vectorizer_content = file.read()
+    return vectorizer_content
 
-    def get_svm_model_content():
-        # Load your model file
-        with open(svm_model_filename, 'rb') as file:
-            model_content = file.read()
-        return model_content
+def get_svm_model_content():
+    # Load your model file
+    with open(svm_model_filename, 'rb') as file:
+        model_content = file.read()
+    return model_content
     
-    def get_NB_model_content():
-        # Load your model file
-        with open(NB_model_filename, 'rb') as file:
-            model_content = file.read()
-        return model_content
+def get_NB_model_content():
+    # Load your model file
+    with open(NB_model_filename, 'rb') as file:
+        model_content = file.read()
+    return model_content
 
 # Create a button to trigger the download of the vectorizer file
 vectorizer_button = st.download_button(label="Download Vectorizer", data=get_vectorizer_content(), file_name=vectorizer_filename, mime='application/octet-stream', key="vectorizer_btn")
