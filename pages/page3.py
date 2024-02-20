@@ -240,12 +240,13 @@ st.divider()
             model_content = file.read()
         return model_content
 
-    # Create a button to trigger the download of the vectorizer file
-    vectorizer_button = st.download_button(label="Download Vectorizer", data=get_vectorizer_content(), file_name=vectorizer_filename, mime='application/octet-stream', key="vectorizer_btn")
+# Create a button to trigger the download of the vectorizer file
+vectorizer_button = st.download_button(label="Download Vectorizer", data=get_vectorizer_content(), file_name=vectorizer_filename, mime='application/octet-stream', key="vectorizer_btn")
 
-    # Create a button to trigger the download of the model file
-    SVM_model_button = st.download_button(label="Download Model", data=get_svm_model_content(), file_name=svm_model_filename, mime='application/octet-stream', key="SVM_model_Btn")
-    # Create a button to trigger the download of the model file
-    NB_model_button = st.download_button(label="Download NB Model", data=get_svm_model_content(), file_name= NB_model_filename, mime='application/octet-stream', key="NB_model_Btn")
+# Create a button to trigger the download of the model file
+SVM_model_button = st.download_button(label="Download Model", data=get_svm_model_content(), file_name=svm_model_filename, mime='application/octet-stream', key="SVM_model_Btn")
+    
+# Create a button to trigger the download of the model file
+NB_model_button = st.download_button(label="Download NB Model", data=get_svm_model_content(), file_name= NB_model_filename, mime='application/octet-stream', key="NB_model_Btn")
 
 
