@@ -30,16 +30,26 @@ def tokenize(line):
     sentence = stop_word(sentence)
     return sentence
 
-filename1 = './svm_model.sav'
-filename2='./NB_model.sav'
+# File Names
+svm_model_filename = './tempoary_svm_model.pkl'
+NB_model_filename = './tempoary_NB_model.pkl'
+vectorizer_filename = './tempoary_vectorizer.pkl'
+# filename1 = './svm_model.sav'
+# filename2='./NB_model.sav'
+# Load the SVM model
+loaded_svm_model = joblib.load(svm_model_filename)
+# Load the NB model
+loaded_NB_model = joblib.load(NB_model_filename)
+# Load the TfidfVectorizer
+loaded_vectorizer = joblib.load(vectorizer_filename)
 
-# load the model from disk
-loaded_model1 = pickle.load(open(filename1, 'rb'))
-loaded_model2 = pickle.load(open(filename1, 'rb'))
-
-#Load Vectorizers from disk
-loaded_vectorizer = pickle.load(open("vectorizer.pickle", "rb"))
-#loaded_selector = pickle.load(open("selector_cap.pickle", "rb"))
+# # load the model from disk
+# loaded_model1 = pickle.load(open(filename1, 'rb'))
+# loaded_model2 = pickle.load(open(filename1, 'rb'))
+#
+# #Load Vectorizers from disk
+# loaded_vectorizer = pickle.load(open("vectorizer_cap.pickle", "rb"))
+# loaded_selector = pickle.load(open("selector_cap.pickle", "rb"))
 
 with st.sidebar:
     selected = option_menu(
@@ -58,8 +68,8 @@ if selected == "SVM":
     predict_btt = st.button("Predict")
     if predict_btt:
         data = loaded_vectorizer.transform([sentence]).toarray()
-        prediction1 = loaded_model1.predict(data)
-        st.text(f"Prediction is {prediction1}")
+        prediction1 = loaded_svm_model.predict(data)
+
         if prediction1 == ['politic']:
             st.text("This is Politics News")
         elif prediction1 == ['crime']:
@@ -77,7 +87,7 @@ if selected == "Naive Bayes":
     predict_btt = st.button("Predict")
     if predict_btt:
         data = loaded_vectorizer.transform([sentence1]).toarray()
-        prediction2 = loaded_model2.predict(data)
+        prediction2 = loaded_NB_model.predict(data)
 
         if prediction2 == ['politic']:
             st.text("This is Politics News")
