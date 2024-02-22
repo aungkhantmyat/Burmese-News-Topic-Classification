@@ -8,6 +8,7 @@ from sklearn import svm, metrics
 from sklearn.metrics import accuracy_score
 from sklearn.naive_bayes import MultinomialNB
 import pyidaungsu as pds
+from sklearn.feature_selection import SelectKBest, chi2
 
 dataset = "articles.csv"
 data = pd.read_csv(dataset)
