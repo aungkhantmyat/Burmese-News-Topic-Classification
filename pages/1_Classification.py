@@ -122,26 +122,37 @@ if selected == "Evaluation":
     st.header("**Experimental Results for Two Classifiers**")
     st.write(html_table, unsafe_allow_html=True)
     st.divider()
-    # Define the different models accuarcy data
+    # Define a color palette suitable for research papers
+    color_palette = ['#1f77b4', '#ff7f0e', '#2ca02c', '#d62728', '#9467bd']
+
+    # Define the different models accuracy data
     bardata = {
-        'Classifier': ['SVM', 'Naive Bayes', 'Random Forest','Decision Tree', 'KNN'],
-        'Accuracy': [0.83, 0.84, 0.79, 0.69, 0.60]
+        'Classifier': ['SVM', 'Naive Bayes', 'Random Forest', 'Decision Tree', 'KNN'],
+        'Accuracy': [0.83, 0.84, 0.79, 0.69, 0.60],
     }
-    # # Convert data to DataFrame
+
+    # Convert data to DataFrame and assign colors
     df1 = pd.DataFrame(bardata)
+    df1['Color'] = color_palette[:len(df1)]
+
     # Display the chart title
     st.header("**Accuracy Comparison with Different Models**")
-    plt.style.use('dark_background')
-    fig, ax = plt.subplots()
-    bars = ax.bar(df1['Classifier'], df1['Accuracy'], color='skyblue')
-    # Add percentage values on bars
-    for bar in bars:
-        yval = bar.get_height()
-        ax.text(bar.get_x() + bar.get_width() / 2, yval, f'{yval:.0%}', va='bottom')
-    # Customize plot
-    ax.set_ylabel('Accuracy (%)')
-    ax.set_ylim(0, 1)  # Set y-axis limits to percentage scale (0 to 100%)
-    # Rotate x-axis labels vertically
-    plt.xticks(rotation=90)
+
+    # Create Plotly bar chart
+    fig = go.Figure(go.Bar(
+        x=df1['Classifier'],
+        y=df1['Accuracy'],
+        text=[f"{acc:.0%}" for acc in df1['Accuracy']],  # Add percentage values on bars
+        textposition='auto',
+        marker_color=df1['Color']  # Use different color for each bar
+    ))
+
+    # Customize layout
+    fig.update_layout(
+        yaxis=dict(title='Accuracy (%)'),  # Set y-axis limits to percentage scale (0 to 100%)
+        xaxis=dict(tickangle=90),  # Rotate x-axis labels vertically
+        plot_bgcolor='rgba(0,0,0,0)',  # Set plot background color
+    )
+
     # Display the chart in Streamlit
-    st.pyplot(fig)
+    st.plotly_chart(fig)
