@@ -32,9 +32,10 @@ def tokenize(line):
     return sentence
 
 # File Names
-svm_model_filename = './tempoary_svm_model.pkl'
-NB_model_filename = './tempoary_NB_model.pkl'
-vectorizer_filename = './tempoary_vectorizer.pkl'
+svm_model_filename = './Final_svm_model.pkl'
+NB_model_filename = './Final_NB_model.pkl'
+vectorizer_filename = './Final_vectorizer.pkl'
+selector_filename= './Final_selector.pkl'
 # filename1 = './svm_model.sav'
 # filename2='./NB_model.sav'
 # Load the SVM model
@@ -43,6 +44,8 @@ loaded_svm_model = joblib.load(svm_model_filename)
 loaded_NB_model = joblib.load(NB_model_filename)
 # Load the TfidfVectorizer
 loaded_vectorizer = joblib.load(vectorizer_filename)
+# Load the Selector
+loaded_selector = joblib.load(selector_filename)
 
 # # load the model from disk
 # loaded_model1 = pickle.load(open(filename1, 'rb'))
@@ -68,7 +71,7 @@ if selected == "SVM":
     sentence = tokenize(sentence)
     predict_btt = st.button("Predict")
     if predict_btt:
-        data = loaded_vectorizer.transform([sentence]).toarray()
+        data = loaded_selector.transform(loaded_vectorizer.transform([sentence]).toarray())
         prediction1 = loaded_svm_model.predict(data)
 
         if prediction1 == ['politic']:
@@ -87,7 +90,7 @@ if selected == "Naive Bayes":
     sentence1 = tokenize(sentence1)
     predict_btt = st.button("Predict")
     if predict_btt:
-        data = loaded_vectorizer.transform([sentence1]).toarray()
+        data = loaded_selector.transform(loaded_vectorizer.transform([sentence1]).toarray())
         prediction2 = loaded_NB_model.predict(data)
 
         if prediction2 == ['politic']:
