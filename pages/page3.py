@@ -116,19 +116,26 @@ y_test = np.array(test_data["Category"])
 #     sentence = pds.tokenize(line,form="word")
 #     return sentence
 
-vectorizer = TfidfVectorizer(tokenizer=tokenize,ngram_range=(1,2))
+
+vectorizer = TfidfVectorizer(tokenizer=tokenize,ngram_range=(1,2), min_df = 3)
 # X_train = vectorizer.fit_transform(X_train)
 # X_test = vectorizer.fit_transform(X_test)
 
 X_train = vectorizer.fit_transform(X_train)  # Fit and transform on the training data
 X_test = vectorizer.transform(X_test)  # Transform using the same vectorizer on the test data
 
+# Selecting the best features from the findings
+# Feature Selection
+
+k_best = 5000
+selector = SelectKBest(chi2, k=k_best)
+X_train = selector.fit_transform(X_train, y_train)
+X_test = selector.transform(X_test)
 
 # Import classifiers and performance metrics
 
-
 # linear kernel model
-svm_model = svm.SVC(kernel='linear')
+svm_model = svm.SVC(kernel='rbf')
 svm_model.fit(X_train, y_train)
 
 # Naive Bayes Model
@@ -154,6 +161,9 @@ joblib.dump(NB_model, NB_model_filename)
 vectorizer_filename = 'vectorizer'+str(random.randint(1,4000))+'.pkl'
 joblib.dump(vectorizer, vectorizer_filename)
 
+# Save the selector
+selector_filename = 'selector'+str(random.randint(1,4000))+'.pkl'
+joblib.dump(selector, selector_filename)
 
 # Load the SVM model
 loaded_svm_model = joblib.load(svm_model_filename)
@@ -164,6 +174,8 @@ loaded_NB_model = joblib.load(NB_model_filename)
 # Load the TfidfVectorizer
 loaded_vectorizer = joblib.load(vectorizer_filename)
 
+# Load the Selector
+loaded_selector = joblib.load(selector_filename)
 
 
 
@@ -177,7 +189,7 @@ actual_classes = []
 # Iterate through each row in the DataFrame
 for index, row in df.iterrows():
     user_input = tokenize(row['news'])  # Use the news column as input
-    data = loaded_vectorizer.transform([user_input]).toarray()
+    data = loaded_selector.transform(loaded_vectorizer.transform([user_input]).toarray())
     output = loaded_svm_model.predict(data)
     predictions.append(output[0])  # Append the prediction
     actual_classes.append(row['class'])  # Append the actual class
@@ -200,7 +212,7 @@ for category, (accuracy, count) in category_accuracies.items():
 # Iterate through each row in the DataFrame
 for index, row in df.iterrows():
     user_input = tokenize(row['news'])  # Use the news column as input
-    data = loaded_vectorizer.transform([user_input]).toarray()
+    data = loaded_selector.transform(loaded_vectorizer.transform([user_input]).toarray())
     output = loaded_NB_model.predict(data)
     predictions.append(output[0])  # Append the prediction
     actual_classes.append(row['class'])  # Append the actual class
@@ -223,30 +235,39 @@ for category, (accuracy, count) in category_accuracies.items():
 st.divider()
 
 def get_vectorizer_content():
+        # Load your vectorizer file
+        with open(vectorizer_filename, 'rb') as file:
+            vectorizer_content = file.read()
+        return vectorizer_content
+
+
+def get_selector_content():
     # Load your vectorizer file
-    with open(vectorizer_filename, 'rb') as file:
-        vectorizer_content = file.read()
-    return vectorizer_content
+    with open(selector_filename, 'rb') as file:
+        selector_content = file.read()
+    return selector_content
 
 def get_svm_model_content():
-    # Load your model file
-    with open(svm_model_filename, 'rb') as file:
-        model_content = file.read()
-    return model_content
-    
+        # Load your model file
+        with open(svm_model_filename, 'rb') as file:
+            model_content = file.read()
+        return model_content
+
 def get_NB_model_content():
-    # Load your model file
-    with open(NB_model_filename, 'rb') as file:
-        model_content = file.read()
-    return model_content
+        # Load your model file
+        with open(NB_model_filename, 'rb') as file:
+            model_content = file.read()
+        return model_content
+
+ # Create a button to trigger the download of the vectorizer file
+vectorizer_button = st.download_button(label="Download Vectorizer", data=get_vectorizer_content(), file_name=vectorizer_filename, mime='application/octet-stream', key="vectorizer_btn")
 
 # Create a button to trigger the download of the vectorizer file
-vectorizer_button = st.download_button(label="Download Vectorizer", data=get_vectorizer_content(), file_name=vectorizer_filename, mime='application/octet-stream', key="vectorizer_btn")
+selector_button = st.download_button(label="Download Selector", data=get_selector_content(), file_name=selector_filename, mime='application/octet-stream', key="selector_btn")
 
 # Create a button to trigger the download of the model file
 SVM_model_button = st.download_button(label="Download Model", data=get_svm_model_content(), file_name=svm_model_filename, mime='application/octet-stream', key="SVM_model_Btn")
-    
-# Create a button to trigger the download of the model file
-NB_model_button = st.download_button(label="Download NB Model", data=get_svm_model_content(), file_name= NB_model_filename, mime='application/octet-stream', key="NB_model_Btn")
 
+ # Create a button to trigger the download of the model file
+NB_model_button = st.download_button(label="Download NB Model", data=get_svm_model_content(), file_name= NB_model_filename, mime='application/octet-stream', key="NB_model_Btn")
 
