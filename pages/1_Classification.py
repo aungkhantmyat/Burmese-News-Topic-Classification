@@ -131,7 +131,7 @@ if selected == "Evaluation":
     df1 = pd.DataFrame(bardata)
     # Display the chart title
     st.header("**Accuracy Comparison with Different Models**")
-    plt.style.use('dark_background')
+    #plt.style.use('dark_background')
     fig, ax = plt.subplots()
     bars = ax.bar(df1['Classifier'], df1['Accuracy'], color='skyblue')
     # Add percentage values on bars
