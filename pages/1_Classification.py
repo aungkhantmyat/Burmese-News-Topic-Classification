@@ -107,13 +107,13 @@ if selected == "Evaluation":
     #Categorical Accuarcy data
     data = {
         'Category': ['Business', 'Crime', 'Entertainment', 'Politic'],
-        'P (%) (NB)': [91, 85, 80, 84],
-        'P (%) (SVM)': [89, 85, 78, 84],
-        'R (%) (NB)': [82, 80, 91, 81],
-        'R (%) (SVM)': [81, 80, 90, 80],
-        'F1 (%) (NB)': [87, 83, 85, 82],
-        'F1 (%) (KNN)': [85, 82, 84, 82]
-    }
+        'P (%) (NB)': [88, 83, 81, 84],
+        'P (%) (SVM)': [87, 85, 77, 86],
+        'R (%) (NB)': [82, 80, 90, 80],
+        'R (%) (SVM)': [82, 77, 91, 78],
+        'F1 (%) (NB)': [85, 82, 85, 82],
+        'F1 (%) (SVM)': [84, 81, 84, 82]
+     }
     # Convert data to DataFrame
     df = pd.DataFrame(data)
     # Convert DataFrame to HTML with index=False
