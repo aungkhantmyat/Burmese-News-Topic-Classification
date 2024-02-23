@@ -125,7 +125,7 @@ if selected == "Evaluation":
     # Define the different models accuarcy data
     bardata = {
         'Classifier': ['SVM', 'Naive Bayes', 'Random Forest','Decision Tree', 'KNN'],
-        'Accuracy': [0.83, 0.84, 0.79, 0.69, 0.60]
+        'Accuracy': [0.83, 0.84, 0.78, 0.69, 0.60]
     }
     # # Convert data to DataFrame
     df1 = pd.DataFrame(bardata)
